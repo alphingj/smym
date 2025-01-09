@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Interface</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .product-list { margin-bottom: 20px; }
+    </style>
+    <script>
+        let cart = [];
+        function addToCart(productName, price) {
+            cart.push({ productName, price });
+            alert(`Added ${productName} for ₹${price} to cart.`);
+        }
+
+        function confirmPurchase() {
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+            const itemsBought = cart.map(item => `${item.productName} - ₹${item.price}`).join(", ");
+            const confirmationMessage = `Items: ${itemsBought}\nTotal: ₹${total}\nPayment Method: ${paymentMethod}`;
+
+            if (confirm(confirmationMessage)) {
+                const transactionDetails = {
+                    date: new Date().toLocaleDateString(),
+                    time: new Date().toLocaleTimeString(),
+                    paymentMethod,
+                    items: cart,
+                    total
+                };
+                localStorage.setItem('transaction', JSON.stringify(transactionDetails));
+                window.location.href = "total.html";
+            }
+        }
+
+        function displayQR() {
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+            const qrImage = document.getElementById('qrImage');
+            qrImage.style.display = paymentMethod === 'gpay' ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <h1>Product List</h1>
+    <div class="product-list">
+        <div>
+            <span>Product A - ₹100</span>
+            <button onclick="addToCart('Product A', 100)">Add to Cart</button>
+        </div>
+        <div>
+            <span>Product B - ₹200</span>
+            <button onclick="addToCart('Product B', 200)">Add to Cart</button>
+        </div>
+    </div>
+
+    <h2>Select Payment Method</h2>
+    <label>
+        <input type="radio" name="payment" value="cash" onclick="displayQR()" checked> Cash
+    </label>
+    <label>
+        <input type="radio" name="payment" value="gpay" onclick="displayQR()"> Google Pay
+    </label>
+    <img id="qrImage" src="qr.png" alt="QR Code" style="display:none; margin-top:10px;"/>
+
+    <button onclick="confirmPurchase()">Confirm Purchase</button>
+    <br><br>
+    <a href="admin.html">Admin Panel</a>
+</body>
+</html>

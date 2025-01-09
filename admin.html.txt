@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <script>
+        function addProduct() {
+            const productName = document.getElementById('productName').value;
+            const productPrice = parseFloat(document.getElementById('productPrice').value);
+            if (productName && !isNaN(productPrice) && productPrice > 0) {
+                const newProduct = document.createElement('div');
+                newProduct.innerHTML = `<span>${productName} - ₹${productPrice}</span> <button onclick="addToCart('${productName}', ${productPrice})">Add to Cart</button>`;
+                document.getElementById('productList').appendChild(newProduct);
+                alert(`Product ${productName} added successfully!`);
+                document.getElementById('productName').value = '';
+                document.getElementById('productPrice').value = '';
+            } else {
+                alert('Please enter valid product name and price.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    <div>
+        <label>Product Name: <input type="text" id="productName"></label>
+        <label>Product Price (INR): <input type="number" id="productPrice" min="1"></label>
+        <button onclick="addProduct()">Add Product</button>
+    </div>
+    <h2>Products</h2>
+    <div id="productList"></div>
+    <br>
+    <a href="index.html">Go to Shop</a>
+</body>
+</html>

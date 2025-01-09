@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Summary</title>
+</head>
+<body>
+    <h1>Transaction Summary</h1>
+    <div id="transactionDetails"></div>
+    <button onclick="window.location.href='index.html'">Go Back to Shop</button>
+
+    <script>
+        const transaction = JSON.parse(localStorage.getItem('transaction'));
+        if (transaction) {
+            const detailsDiv = document.getElementById('transactionDetails');
+            detailsDiv.innerHTML = `
+                <p>Date: ${transaction.date}</p>
+                <p>Time: ${transaction.time}</p>
+                <p>Payment Method: ${transaction.paymentMethod}</p>
+                <p>Items Purchased:</p>
+                <ul>
+                    ${transaction.items.map(item => `<li>${item.productName} - ₹${item.price}</li>`).join('')}
+                </ul>
+                <p>Grand Total: ₹${transaction.total}</p>
+            `;
+            localStorage.removeItem('transaction'); // Clear transaction after showing
+        } else {
+            document.getElementById('transactionDetails').innerText = 'No transaction details found.';
+        }
+    </script>
+</body>
+</html>
